@@ -1,0 +1,109 @@
+﻿<!DOCTYPE html> 
+<html>
+<head>
+    <title>CursorAnimation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <link rel="stylesheet" href="demo/js/jquery/ui-lightness/jquery-ui-1.10.2.custom.css" />
+    <script type="text/javascript" src="demo/js/jquery/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="demo/js/primitives.min.js"></script>
+    <link href="demo/css/primitives.latest.css" media="screen" rel="stylesheet" type="text/css" />
+
+
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            var options = new primitives.orgdiagram.Config();
+            options.hasSelectorCheckbox = primitives.common.Enabled.False;
+            options.hasButtons = primitives.common.Enabled.False;
+            options.templates = [getCursorTemplate()];
+            options.onCursorRender = onCursorRender;
+            options.defaultTemplateName = "CursorTemplate";
+
+            var items = [
+                new primitives.orgdiagram.ItemConfig({
+                    id: 0,
+                    parent: null,
+                    title: "Scott Aasrud",
+                    description: "VP, Public Sector",
+                    image: "demo/images/photos/a.png"
+                }),
+                new primitives.orgdiagram.ItemConfig({
+                    id: 1,
+                    parent: 0,
+                    title: "Ted Lucas",
+                    description: "VP, Human Resources",
+                    image: "demo/images/photos/b.png"
+                }),
+                new primitives.orgdiagram.ItemConfig({
+                    id: 2,
+                    parent: 0,
+                    title: "Joao Stuger",
+                    description: "Business Solutions, US",
+                    image: "demo/images/photos/c.png"
+                })
+            ];
+
+            options.items = items;
+            options.cursorItem = 0;
+
+            jQuery("#basicdiagram").orgDiagram(options);
+        });
+
+
+
+        function getCursorTemplate() {
+            var result = new primitives.orgdiagram.TemplateConfig();
+            result.name = "CursorTemplate";
+
+            var cursorTemplate = jQuery("<div name='cursorBorder'></div>")
+                .css({
+                    width: (result.itemSize.width + result.cursorPadding.left + result.cursorPadding.right) + "px",
+                    height: (result.itemSize.height + result.cursorPadding.top + result.cursorPadding.bottom) + "px",
+                    "border-width": result.cursorBorderWidth + "px",
+                    "border-style": "solid",
+                    "border-color": "#ff0000"
+                }).addClass("bp-item bp-corner-all bp-cursor-frame");
+
+            result.cursorTemplate = cursorTemplate.wrap('<div>').parent().html();
+
+            return result;
+        }
+
+        function onCursorRender(event, data) {
+            switch (data.renderingMode) {
+                case primitives.common.RenderingMode.Create:
+                    break;
+                case primitives.common.RenderingMode.Update:
+                    /* Update widgets here */
+                    break;
+            }
+
+            var itemConfig = data.context;
+
+            if (data.templateName == "CursorTemplate") {
+                var itemConfig = data.context;
+
+                data.element.css({ "border-color": "red" });
+                data.element.css({ "border-color": "red" });
+                data.element.animate({ "border-color": "#eb8f00" }, 300, "swing",
+                    function () {
+                        data.element.css({ "border-color": "red" });
+                        data.element.animate({ "border-color": "#eb8f00" }, 300, "swing",
+                            function () {
+                                data.element.css({ "border-color": "red" });
+                                data.element.animate({ "border-color": "#eb8f00" }, 300);
+                            }
+                        );
+                    }
+                );
+
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="basicdiagram" style="width: 640px; height: 480px; border-style: dotted; border-width: 1px;" />
+</body>
+</html>
